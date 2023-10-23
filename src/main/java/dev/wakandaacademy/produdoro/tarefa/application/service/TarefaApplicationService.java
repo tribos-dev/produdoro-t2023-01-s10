@@ -40,4 +40,9 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
         return tarefa;
     }
+	@Override
+	public void editaTarefa(String usuario, UUID idTarefa) {
+		 log.info("[inicia] TarefaApplicationService - editaTarefa");
+		 log.info("[finaliza] TarefaApplicationService - editaTarefa");
+	}
 }
