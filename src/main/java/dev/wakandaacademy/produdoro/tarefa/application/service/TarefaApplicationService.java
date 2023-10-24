@@ -42,9 +42,9 @@ public class TarefaApplicationService implements TarefaService {
     }
 
     @Override
-    public void imcrementaPomodoro(String usuario, UUID idTarefa) {
+    public void imcrementaPomodoro(String usuarioEmail, UUID idTarefa) {
         log.info("[inicia] TarefaApplicationService - imcrementaPomodoro");
-        Tarefa tarefa = detalhaTarefa(usuario,idTarefa);
+        Tarefa tarefa = detalhaTarefa(usuarioEmail,idTarefa);
         tarefa.incrementaPomodoro();
         tarefaRepository.salva(tarefa);
         log.info("[finaliza] TarefaApplicationService - imcrementaPomodoro");
