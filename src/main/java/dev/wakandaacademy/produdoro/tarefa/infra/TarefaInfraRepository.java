@@ -37,4 +37,10 @@ public class TarefaInfraRepository implements TarefaRepository {
         log.info("[finaliza] TarefaInfraRepository - buscaTarefaPorId");
         return tarefaPorId;
     }
+
+    @Override
+    public void deleta(UUID idTarefa) {
+        log.info("[inicia] TarefaInfraRepository - deleta");
+        log.info("[finaliza] TarefaInfraRepository - deleta");
+    }
 }
