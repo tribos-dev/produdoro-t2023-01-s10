@@ -39,8 +39,9 @@ public class TarefaInfraRepository implements TarefaRepository {
     }
 
     @Override
-    public void deleta(UUID idTarefa) {
+    public void deleta(Tarefa tarefa) {
         log.info("[inicia] TarefaInfraRepository - deleta");
+        tarefaSpringMongoDBRepository.delete(tarefa);
         log.info("[finaliza] TarefaInfraRepository - deleta");
     }
 }

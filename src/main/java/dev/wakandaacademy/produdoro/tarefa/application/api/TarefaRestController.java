@@ -36,10 +36,11 @@ public class TarefaRestController implements TarefaAPI {
 	}
 
 	@Override
-	public void deletaTarefa(UUID idTarefa) {
+	public void deletaTarefa(String token, UUID idTarefa) {
 		log.info("[inicia] TarefaRestController - deletaTarefa");
 		log.info("[idTarefa]{}", idTarefa);
-		tarefaService.deletaTarefa(idTarefa);
+		String usuario = getUsuarioByToken(token);
+		tarefaService.deletaTarefa(usuario, idTarefa);
 		log.info("[finaliza] TarefaRestController - deletaTarefa");
 	}
 
