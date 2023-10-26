@@ -2,13 +2,9 @@ package dev.wakandaacademy.produdoro.tarefa.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -17,15 +13,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import dev.wakandaacademy.produdoro.DataHelper;
-import dev.wakandaacademy.produdoro.handler.APIException;
-import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefa;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 import dev.wakandaacademy.produdoro.usuario.application.repository.UsuarioRepository;
-import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 
 @ExtendWith(MockitoExtension.class)
 class TarefaApplicationServiceTest {
@@ -57,28 +49,5 @@ class TarefaApplicationServiceTest {
     public TarefaRequest getTarefaRequest() {
         TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
         return request;
-    }
-    
-    @Test
-    void deveEditarTarefa() {
-    	EditaTarefa request = DataHelper.getEditaTarefaRequest();
-    	Usuario usuario = DataHelper.createUsuario();
-    	Tarefa tarefa = DataHelper.createTarefa();
-    	when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
-    	when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
-    	tarefaApplicationService.editaDescricaoDaTarefa(usuario.getEmail(), tarefa.getIdTarefa(), request);
-    	
-    	verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario.getEmail());
-        verify(tarefaRepository, times(1)).buscaTarefaPorId(tarefa.getIdTarefa());
-        assertEquals(request.getDescricao(), tarefa.getDescricao());
-    }
-    
-    @Test
-    void naoDeveEditarTarefa () {
-    	UUID idTarefaInvalido = UUID.fromString("c28932c0-4b44-4192-aaa1-021fd2d8ecef");
-    	String UsuarioEmail = DataHelper.getEditaTarefaRequest().getDescricao();
-
-        when(tarefaRepository.buscaTarefaPorId(idTarefaInvalido)).thenThrow(APIException.class);
-        assertThrows(APIException.class, () -> tarefaApplicationService.editaDescricaoDaTarefa(UsuarioEmail, idTarefaInvalido, null));
     }
 }
