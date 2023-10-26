@@ -72,6 +72,7 @@ class TarefaApplicationServiceTest {
 
         verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario.getEmail());
         verify(tarefaRepository, times(1)).buscaTarefaPorId(tarefa.getIdTarefa());
+        verify(tarefa, times(1)).pertenceAoUsuario(usuario);
         assertEquals(StatusAtivacaoTarefa.ATIVA, tarefa.getStatusAtivacao());
     }
 
