@@ -45,8 +45,8 @@ public class Usuario {
 	}
 
     public void validaUsuario(UUID idUsuario) {
-		if(!this.getIdUsuario().equals(idUsuario)){
-			throw APIException.build(HttpStatus.UNAUTHORIZED, "credencial de autenticação não e valida")
+		if(!this.idUsuario.equals(idUsuario)){
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "credencial de autenticação não é valida!");
 		}
     }
 
