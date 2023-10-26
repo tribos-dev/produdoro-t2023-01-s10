@@ -3,7 +3,6 @@ package dev.wakandaacademy.produdoro.tarefa.application.service;
 import dev.wakandaacademy.produdoro.handler.APIException;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
-import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaListResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
@@ -59,7 +58,7 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[inicia] TarefaApplicationService - validaUsuario");
         if(!idUsuario.equals(usuarioPorEmail.getIdUsuario())){
             throw APIException
-                    .build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado.");
+                    .build(HttpStatus.BAD_REQUEST, "Usuário não autorizado.");
         }
         log.info("[finaliza] TarefaApplicationService - validaUsuario");
     }
