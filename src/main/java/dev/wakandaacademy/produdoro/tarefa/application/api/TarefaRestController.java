@@ -36,10 +36,10 @@ public class TarefaRestController implements TarefaAPI {
 	}
 
 	@Override
-	public List<TarefaListResponse> getTodasTarefas(String token, UUID idUsuario) {
+	public List<TarefaDetalhadoResponse> getTodasTarefas(String token, UUID idUsuario) {
 		log.info("[inicio] TarefaRestController - getTodasTarefas");
 		String usuario = getUsuarioByToken(token);
-		List <TarefaListResponse> tarefas = tarefaService.buscaTarefaPorUsuario(usuario, idUsuario);
+		List <TarefaDetalhadoResponse> tarefas = tarefaService.buscaTarefaPorUsuario(usuario, idUsuario);
 		log.info("[finaliza] TarefaRestController - getTodasTarefas");
 		return tarefas;
 	}

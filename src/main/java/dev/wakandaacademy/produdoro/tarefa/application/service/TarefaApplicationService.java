@@ -1,6 +1,7 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaListResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
@@ -44,10 +45,21 @@ public class TarefaApplicationService implements TarefaService {
     }
 
     @Override
-    public List<TarefaListResponse> buscaTarefaPorUsuario(String usuario, UUID idUsuario) {
+    public List<TarefaDetalhadoResponse> buscaTarefaPorUsuario(String usuario, UUID idUsuario) {
         log.info("[inicia] TarefaApplicationService - buscaTarefaPorUsuario");
-        List<Tarefa> tarefa = tarefaRepository.buscaTodasTarefasDoUsuario();
+        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+        validaUsuario(usuarioPorEmail, idUsuario);
+        List<Tarefa> tarefas = tarefaRepository.buscaTodasTarefasDoUsuario();
         log.info("[finaliza] TarefaApplicationService - buscaTarefaPorUsuario");
-        return TarefaListResponse.converte(tarefa);
+        return TarefaDetalhadoResponse.converte(tarefas);
+    }
+
+    private void validaUsuario(Usuario usuarioPorEmail, UUID idUsuario) {
+        log.info("[inicia] TarefaApplicationService - validaUsuario");
+        if(!idUsuario.equals(usuarioPorEmail.getIdUsuario())){
+            throw APIException
+                    .build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado.");
+        }
+        log.info("[finaliza] TarefaApplicationService - validaUsuario");
     }
 }
