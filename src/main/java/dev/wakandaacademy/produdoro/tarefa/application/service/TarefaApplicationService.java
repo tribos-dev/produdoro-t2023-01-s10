@@ -42,24 +42,4 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
         return tarefa;
     }
-
-    @Override
-    public List<TarefaDetalhadoResponse> buscaTarefaPorUsuario(String usuario, UUID idUsuario) {
-        log.info("[inicia] TarefaApplicationService - buscaTarefaPorUsuario");
-        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
-        usuarioRepository.buscaUsuarioPorId(idUsuario);
-        validaUsuario(usuarioPorEmail, idUsuario);
-        List<Tarefa> tarefas = tarefaRepository.buscaTodasTarefasDoUsuario(idUsuario);
-        log.info("[finaliza] TarefaApplicationService - buscaTarefaPorUsuario");
-        return TarefaDetalhadoResponse.converte(tarefas);
-    }
-
-    private void validaUsuario(Usuario usuarioPorEmail, UUID idUsuario) {
-        log.info("[inicia] TarefaApplicationService - validaUsuario");
-        if(!idUsuario.equals(usuarioPorEmail.getIdUsuario())){
-            throw APIException
-                    .build(HttpStatus.BAD_REQUEST, "Usuário não autorizado.");
-        }
-        log.info("[finaliza] TarefaApplicationService - validaUsuario");
-    }
 }
