@@ -52,8 +52,5 @@ public class UsuarioApplicationService implements UsuarioService {
 		usuario.mudaStatusPausaCurta();
 		usuarioRepository.salva(usuario);
 		log.info("[finaliza] UsuarioApplicationService - mudaStatusPausaCurta");
-
 	}
-
-
 }

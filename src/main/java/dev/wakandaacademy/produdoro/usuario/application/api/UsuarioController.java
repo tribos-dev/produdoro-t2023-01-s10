@@ -46,6 +46,5 @@ public class UsuarioController implements UsuarioAPI {
 				.orElseThrow(() -> APIException.build(HttpStatus.FORBIDDEN, "Token invalido!"));
 		usuarioAppplicationService.mudaStatusPausaCurta(usuarioEmail, idUsuario);
 		log.info("[finaliza] UsuarioController - mudaStatusPausaCurta");
-
 	}
 }
