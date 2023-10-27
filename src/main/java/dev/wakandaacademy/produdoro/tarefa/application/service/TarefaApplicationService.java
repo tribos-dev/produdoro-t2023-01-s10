@@ -58,7 +58,7 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[inicia] TarefaApplicationService - validaUsuario");
         if(!idUsuario.equals(usuarioPorEmail.getIdUsuario())){
             throw APIException
-                    .build(HttpStatus.BAD_REQUEST, "Usuário não autorizado.");
+                    .build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado.");
         }
         log.info("[finaliza] TarefaApplicationService - validaUsuario");
     }
