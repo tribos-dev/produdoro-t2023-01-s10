@@ -1,9 +1,12 @@
 package dev.wakandaacademy.produdoro.tarefa.domain;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
+import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -58,8 +61,17 @@ public class Tarefa {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não é dono da Tarefa solicitada!");
 		}
 	}
-	public void ativarTarefa() {
+	public void ativarTarefa(UUID idUsuario, TarefaRepository tarefaRepository) {
+		List<Tarefa> tarefaDoUsuario = tarefaRepository.tarefasDoUsuario(idUsuario);
+		List<Tarefa> tarefasAtivas = tarefaDoUsuario.stream()
+				.filter(tarefa -> tarefa.getStatusAtivacao() == StatusAtivacaoTarefa.ATIVA)
+				.collect(Collectors.toList());
+		tarefasAtivas.forEach(Tarefa::desativarTarefas);
 		this.statusAtivacao = StatusAtivacaoTarefa.ATIVA;
+	}
+
+	public void desativarTarefas() {
+		this.statusAtivacao = StatusAtivacaoTarefa.INATIVA;
 	}
 
 	public void concluiTarefa() {
