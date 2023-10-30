@@ -26,10 +26,10 @@ public interface TarefaAPI {
 	@ResponseStatus(code = HttpStatus.OK)
 	TarefaDetalhadoResponse detalhaTarefa(@RequestHeader(name = "Authorization", required = true) String token,
 			@PathVariable UUID idTarefa);
-	
+
 	@PatchMapping("/{idTarefa}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
-	void editaTarefa(@RequestHeader(name = "Authorization", required = true) String token,
-			@PathVariable UUID idTarefa, @RequestBody EditaTarefa tarefaRequestEditada);
-	
+	void editaTarefa(@RequestHeader(name = "Authorization", required = true) String token, @PathVariable UUID idTarefa,
+			@RequestBody EditaTarefa tarefaRequestEditada);
+
 }

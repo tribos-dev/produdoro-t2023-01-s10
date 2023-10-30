@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,6 +12,7 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,34 +32,32 @@ import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 @ExtendWith(MockitoExtension.class)
 class TarefaApplicationServiceTest {
 
-    //	@Autowired
-    @InjectMocks
-    TarefaApplicationService tarefaApplicationService;
+	// @Autowired
+	@InjectMocks
+	TarefaApplicationService tarefaApplicationService;
 
-    //	@MockBean
-    @Mock
-    TarefaRepository tarefaRepository;
-    @Mock
-    UsuarioRepository usuarioRepository;
+	// @MockBean
+	@Mock
+	TarefaRepository tarefaRepository;
+	
+	@Mock
+	UsuarioRepository usuarioRepository;
 
     @Test
     void deveRetornarIdTarefaNovaCriada() {
         TarefaRequest request = getTarefaRequest();
         when(tarefaRepository.salva(any())).thenReturn(new Tarefa(request));
+		TarefaIdResponse response = tarefaApplicationService.criaNovaTarefa(request);
 
-        TarefaIdResponse response = tarefaApplicationService.criaNovaTarefa(request);
+		assertNotNull(response);
+		assertEquals(TarefaIdResponse.class, response.getClass());
+		assertEquals(UUID.class, response.getIdTarefa().getClass());
+	}
 
-        assertNotNull(response);
-        assertEquals(TarefaIdResponse.class, response.getClass());
-        assertEquals(UUID.class, response.getIdTarefa().getClass());
-    }
-
-
-
-    public TarefaRequest getTarefaRequest() {
-        TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
-        return request;
-    }
+	public TarefaRequest getTarefaRequest() {
+		TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
+		return request;
+	}
     
     @Test
     void deveEditarTarefa() {
