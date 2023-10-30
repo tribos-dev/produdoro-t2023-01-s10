@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.HttpStatus;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
-import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefa;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 import lombok.AccessLevel;
@@ -56,7 +56,7 @@ public class Tarefa {
 		}
 	}
 
-	public void edita(EditaTarefa tarefaRequestEditada) {
+	public void edita(EditaTarefaRequest tarefaRequestEditada) {
 		this.descricao = tarefaRequestEditada.getDescricao();
 	}
 }

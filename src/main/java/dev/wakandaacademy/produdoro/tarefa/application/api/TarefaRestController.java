@@ -42,7 +42,7 @@ public class TarefaRestController implements TarefaAPI {
 		log.info("[usuario] {}", usuario);
 		return usuario;
 	}
-	 public void editaTarefa(String token, UUID idTarefa, EditaTarefa tarefaRequestEditada) {
+	 public void editaTarefa(String token, UUID idTarefa, EditaTarefaRequest tarefaRequestEditada) {
 		log.info("[inicia] TarefaRestController - editaTarefa");
 		String usuario = getUsuarioByToken(token);
 		tarefaService.editaDescricaoDaTarefa(usuario, idTarefa, tarefaRequestEditada);

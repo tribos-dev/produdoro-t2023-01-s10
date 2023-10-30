@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
-import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefa;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
@@ -42,13 +42,9 @@ public class TarefaApplicationService implements TarefaService {
         return tarefa;
     }
 	@Override
-	public void editaDescricaoDaTarefa(String usuario, UUID idTarefa, EditaTarefa tarefaRequestEditada) {
+	public void editaDescricaoDaTarefa(String usuario, UUID idTarefa, EditaTarefaRequest tarefaRequestEditada) {
 		log.info("[inicia] TarefaApplicationService - editaDescricaoDaTarefa");
-		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
-		log.info("[usuarioPorEmail]{}", usuarioPorEmail);
-		Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
-				.orElseThrow(() -> APIException.build(HttpStatus.NOT_FOUND, "Tarefa não encontrada!"));
-		tarefa.pertenceAoUsuario(usuarioPorEmail);
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
 		tarefa.edita(tarefaRequestEditada);
 		tarefaRepository.salva(tarefa);
 		log.info("[finaliza] TarefaApplicationService - editaDescricaoDaTarefa");
