@@ -29,6 +29,7 @@ public class UsuarioController implements UsuarioAPI {
 		log.info("[finaliza] UsuarioController - postNovoUsuario");
 		return usuarioCriado;
 	}
+
 	@Override
 	public UsuarioCriadoResponse buscaUsuarioPorId(UUID idUsuario) {
 		log.info("[inicia] UsuarioController - buscaUsuarioPorId");

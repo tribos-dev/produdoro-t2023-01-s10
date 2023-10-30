@@ -32,7 +32,6 @@ class TarefaApplicationServiceTest {
 	// @Autowired
 	@InjectMocks
 	TarefaApplicationService tarefaApplicationService;
-
 	// @MockBean
 	@Mock
 	TarefaRepository tarefaRepository;
@@ -50,6 +49,23 @@ class TarefaApplicationServiceTest {
 		assertNotNull(response);
 		assertEquals(TarefaIdResponse.class, response.getClass());
 		assertEquals(UUID.class, response.getIdTarefa().getClass());
+	}
+
+	@Test
+	void deveDeletarTarefa() {
+		String usuario = "email@email.com";
+		UUID idTarefa = UUID.randomUUID();
+		Usuario usuarioMock = DataHelper.createUsuario();
+		Tarefa tarefaMock = DataHelper.createTarefa();
+
+		when(usuarioRepository.buscaUsuarioPorEmail(usuario)).thenReturn(usuarioMock);
+		when(tarefaRepository.buscaTarefaPorId(idTarefa)).thenReturn(Optional.of(tarefaMock));
+		tarefaApplicationService.deletaTarefa(usuario, idTarefa);
+
+		verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario);
+		verify(tarefaRepository, times(1)).buscaTarefaPorId(idTarefa);
+		verify(tarefaRepository, times(1)).deleta(tarefaMock);
+
 	}
 
 	public TarefaRequest getTarefaRequest() {
