@@ -45,11 +45,11 @@ public class Usuario {
 		this.configuracao = new ConfiguracaoUsuario(configuracaoPadrao);
 	}
 	public void validaUsuario(Usuario usuarioPorEmail, UUID idUsuario) {
-		log.info("[inicia] TarefaApplicationService - validaUsuario");
+		log.info("[inicia] Usuario - validaUsuario");
 		if(!idUsuario.equals(usuarioPorEmail.getIdUsuario())){
 			throw APIException
 					.build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado.");
 		}
-		log.info("[finaliza] TarefaApplicationService - validaUsuario");
+		log.info("[finaliza] Usuario - validaUsuario");
 	}
 }
