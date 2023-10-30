@@ -48,7 +48,7 @@ public class Usuario {
 		log.info("[inicia] Usuario - validaUsuario");
 		if(!idUsuario.equals(usuarioPorEmail.getIdUsuario())){
 			throw APIException
-					.build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado.");
+					.build(HttpStatus.UNAUTHORIZED, "credencial de autenticação não e valida!");
 		}
 		log.info("[finaliza] Usuario - validaUsuario");
 	}
