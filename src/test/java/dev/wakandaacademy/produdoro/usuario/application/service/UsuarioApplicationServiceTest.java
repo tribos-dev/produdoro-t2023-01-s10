@@ -51,5 +51,4 @@ class UsuarioApplicationServiceTest {
 		assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusException());
 		assertEquals("Credencial de autenticação não é valida", ex.getMessage());
 	}
-
 }

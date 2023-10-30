@@ -59,5 +59,6 @@ public class Usuario {
 		log.info("[inicia] Usuario - mudaStatusPausaLonga");
 		this.status = StatusUsuario.PAUSA_LONGA;
 		log.info("[finaliza] Usuario - mudaStatusPausaLonga");
-	}
+
+    }
 }
