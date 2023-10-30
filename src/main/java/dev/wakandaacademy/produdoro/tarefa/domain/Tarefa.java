@@ -61,12 +61,13 @@ public class Tarefa {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não é dono da Tarefa solicitada!");
 		}
 	}
-	public void ativarTarefa(UUID idUsuario, TarefaRepository tarefaRepository) {
-		List<Tarefa> tarefaDoUsuario = tarefaRepository.tarefasDoUsuario(idUsuario);
-		List<Tarefa> tarefasAtivas = tarefaDoUsuario.stream()
-				.filter(tarefa -> tarefa.getStatusAtivacao() == StatusAtivacaoTarefa.ATIVA)
-				.collect(Collectors.toList());
-		tarefasAtivas.forEach(Tarefa::desativarTarefas);
+	public void ativarTarefa() {
+//		List<Tarefa> tarefaDoUsuario = tarefaRepository.buscaTarefasDoUsuario(idUsuario);
+//		List<Tarefa> tarefasAtivas = tarefaDoUsuario.stream()
+//				.filter(tarefa -> tarefa.getStatusAtivacao() == StatusAtivacaoTarefa.ATIVA)
+//				.collect(Collectors.toList());
+//
+//		tarefasAtivas.forEach(Tarefa::desativarTarefas);
 		this.statusAtivacao = StatusAtivacaoTarefa.ATIVA;
 	}
 

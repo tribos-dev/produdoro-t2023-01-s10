@@ -19,8 +19,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequiredArgsConstructor
 public class TarefaApplicationService implements TarefaService {
-	private final TarefaRepository tarefaRepository;
-	private final UsuarioRepository usuarioRepository;
+    private final TarefaRepository tarefaRepository;
+    private final UsuarioRepository usuarioRepository;
 
     @Override
     public TarefaIdResponse criaNovaTarefa(TarefaRequest tarefaRequest) {
@@ -29,6 +29,7 @@ public class TarefaApplicationService implements TarefaService {
         log.info("[finaliza] TarefaApplicationService - criaNovaTarefa");
         return TarefaIdResponse.builder().idTarefa(tarefaCriada.getIdTarefa()).build();
     }
+
     @Override
     public Tarefa detalhaTarefa(String usuario, UUID idTarefa) {
         log.info("[inicia] TarefaApplicationService - detalhaTarefa");
@@ -42,38 +43,41 @@ public class TarefaApplicationService implements TarefaService {
     }
 
     @Override
-    public void ativaTarefa(String usuarioEmail, UUID idTarefa) {
+    public void ativaTarefa(String usuarioEmail, UUID idUsuario, UUID idTarefa) {
         log.info("[inicia] TarefaApplicationService - ativaTarefa");
         Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
                 .orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "id da tarefa inválido"));
 
         Usuario usuario = usuarioRepository.buscaUsuarioPorEmail(usuarioEmail);
         tarefa.pertenceAoUsuario(usuario);
-        tarefa.ativarTarefa(usuario.getIdUsuario(), tarefaRepository);
+
+        tarefa.ativarTarefa();
+        tarefaRepository.desativaTarefa(idUsuario);
+
         tarefaRepository.salva(tarefa);
         log.info("[finaliza] TarefaApplicationService - ativaTarefa");
     }
 
-	@Override
-	public void imcrementaPomodoro(String usuarioEmail, UUID idTarefa) {
-		log.info("[inicia] TarefaApplicationService - imcrementaPomodoro");
-		Tarefa tarefa = detalhaTarefa(usuarioEmail, idTarefa);
-		tarefa.incrementaPomodoro();
-		tarefaRepository.salva(tarefa);
-		log.info("[finaliza] TarefaApplicationService - imcrementaPomodoro");
-	}
+    @Override
+    public void imcrementaPomodoro(String usuarioEmail, UUID idTarefa) {
+        log.info("[inicia] TarefaApplicationService - imcrementaPomodoro");
+        Tarefa tarefa = detalhaTarefa(usuarioEmail, idTarefa);
+        tarefa.incrementaPomodoro();
+        tarefaRepository.salva(tarefa);
+        log.info("[finaliza] TarefaApplicationService - imcrementaPomodoro");
+    }
 
-	@Override
-	public void concluiTarefa(String usuario, UUID idTarefa) {
-		log.info("[inicia] TarefaApplicationService - concluiTarefa");
-		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
-		log.info("[usuarioPorEmail] {}", usuarioPorEmail);
-		Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
-				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Tarefa não encontrada!"));
-		tarefa.pertenceAoUsuario(usuarioPorEmail);
-		tarefa.concluiTarefa();
-		tarefaRepository.salva(tarefa);
-		log.info("[finaliza] TarefaApplicationService - concluiTarefa");
+    @Override
+    public void concluiTarefa(String usuario, UUID idTarefa) {
+        log.info("[inicia] TarefaApplicationService - concluiTarefa");
+        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+        log.info("[usuarioPorEmail] {}", usuarioPorEmail);
+        Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
+                .orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Tarefa não encontrada!"));
+        tarefa.pertenceAoUsuario(usuarioPorEmail);
+        tarefa.concluiTarefa();
+        tarefaRepository.salva(tarefa);
+        log.info("[finaliza] TarefaApplicationService - concluiTarefa");
 
-	}
+    }
 }
