@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import javax.validation.constraints.Email;
 
+import dev.wakandaacademy.produdoro.handler.APIException;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -16,7 +18,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
+import org.springframework.http.HttpStatus;
+@Log4j2
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -40,5 +43,13 @@ public class Usuario {
 		this.email = usuarioNovo.getEmail();
 		this.status = StatusUsuario.FOCO;
 		this.configuracao = new ConfiguracaoUsuario(configuracaoPadrao);
+	}
+	public void validaUsuario(Usuario usuarioPorEmail, UUID idUsuario) {
+		log.info("[inicia] TarefaApplicationService - validaUsuario");
+		if(!idUsuario.equals(usuarioPorEmail.getIdUsuario())){
+			throw APIException
+					.build(HttpStatus.UNAUTHORIZED, "Usuário não autorizado.");
+		}
+		log.info("[finaliza] TarefaApplicationService - validaUsuario");
 	}
 }
