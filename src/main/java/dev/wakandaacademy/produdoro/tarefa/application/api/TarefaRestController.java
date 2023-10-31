@@ -1,5 +1,6 @@
 package dev.wakandaacademy.produdoro.tarefa.application.api;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,31 @@ public class TarefaRestController implements TarefaAPI {
 		return new TarefaDetalhadoResponse(tarefa);
 	}
 
+	@Override
+	public List<TarefaDetalhadoResponse> getTodasTarefas(String token, UUID idUsuario) {
+		log.info("[inicio] TarefaRestController - getTodasTarefas");
+		String usuario = getUsuarioByToken(token);
+		List<TarefaDetalhadoResponse> tarefas = tarefaService.buscaTarefaPorUsuario(usuario, idUsuario);
+		log.info("[finaliza] TarefaRestController - getTodasTarefas");
+		return tarefas;
+	}
+
+	@Override
+	public void deletaTarefa(String token, UUID idTarefa) {
+		log.info("[inicia] TarefaRestController - deletaTarefa");
+		log.info("[idTarefa]{}", idTarefa);
+		String usuario = getUsuarioByToken(token);
+		tarefaService.deletaTarefa(usuario, idTarefa);
+		log.info("[finaliza] TarefaRestController - deletaTarefa");
+	}
+
+	public void imcrementaPomodoro(String token, UUID idTarefa) {
+		log.info("[inicia] TarefaRestController - imcrementaPomodoro");
+		String usuario = getUsuarioByToken(token);
+		tarefaService.imcrementaPomodoro(usuario, idTarefa);
+		log.info("[finaliza] TarefaRestController - imcrementaPomodoro");
+	}
+
 	private String getUsuarioByToken(String token) {
 		log.debug("[token] {}", token);
 		String usuario = tokenService.getUsuarioByBearerToken(token)
@@ -42,12 +68,20 @@ public class TarefaRestController implements TarefaAPI {
 		log.info("[usuario] {}", usuario);
 		return usuario;
 	}
-	 public void editaTarefa(String token, UUID idTarefa, EditaTarefaRequest tarefaRequestEditada) {
+
+	public void editaTarefa(String token, UUID idTarefa, EditaTarefaRequest tarefaRequestEditada) {
 		log.info("[inicia] TarefaRestController - editaTarefa");
 		String usuario = getUsuarioByToken(token);
 		tarefaService.editaDescricaoDaTarefa(usuario, idTarefa, tarefaRequestEditada);
 		log.info("[finaliza] TarefaRestController - editaTarefa");
-		
+
 	}
 
+	@Override
+	public void concluiTarefa(String token, UUID idTarefa) {
+		log.info("[inicia] TarefaRestController - concluiTarefa");
+		String usuario = getUsuarioByToken(token);
+		tarefaService.concluiTarefa(usuario, idTarefa);
+		log.info("[finaliza] TarefaRestController - concluiTarefa");
+	}
 }

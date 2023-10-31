@@ -18,11 +18,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
+@Setter
 @Document(collection = "Tarefa")
 public class Tarefa {
 	@Id
@@ -59,4 +61,13 @@ public class Tarefa {
 	public void edita(EditaTarefaRequest tarefaRequestEditada) {
 		this.descricao = tarefaRequestEditada.getDescricao();
 	}
+
+	public void incrementaPomodoro() {
+		this.contagemPomodoro += 1;
+	}
+
+	public void concluiTarefa() {
+		this.status = StatusTarefa.CONCLUIDA;
+	}
+
 }
