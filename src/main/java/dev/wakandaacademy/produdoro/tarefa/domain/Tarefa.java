@@ -62,17 +62,7 @@ public class Tarefa {
 		}
 	}
 	public void ativarTarefa() {
-//		List<Tarefa> tarefaDoUsuario = tarefaRepository.buscaTarefasDoUsuario(idUsuario);
-//		List<Tarefa> tarefasAtivas = tarefaDoUsuario.stream()
-//				.filter(tarefa -> tarefa.getStatusAtivacao() == StatusAtivacaoTarefa.ATIVA)
-//				.collect(Collectors.toList());
-//
-//		tarefasAtivas.forEach(Tarefa::desativarTarefas);
 		this.statusAtivacao = StatusAtivacaoTarefa.ATIVA;
-	}
-
-	public void desativarTarefas() {
-		this.statusAtivacao = StatusAtivacaoTarefa.INATIVA;
 	}
 
 	public void concluiTarefa() {
