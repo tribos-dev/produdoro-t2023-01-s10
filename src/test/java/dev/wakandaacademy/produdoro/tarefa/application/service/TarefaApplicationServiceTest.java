@@ -1,6 +1,7 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -84,6 +85,7 @@ class TarefaApplicationServiceTest {
 		when(tarefaRepository.buscaTarefaPorId(idTarefa)).thenReturn(Optional.of(tarefaMock));
 		tarefaApplicationService.concluiTarefa(usuario, idTarefa);
 	}
+
 	@Test
 	@DisplayName("Teste incrementa pomodoro")
 	void incrementaPomodoro_idTarefaETokenValido_DeveIncrementarUmPomodoro() {

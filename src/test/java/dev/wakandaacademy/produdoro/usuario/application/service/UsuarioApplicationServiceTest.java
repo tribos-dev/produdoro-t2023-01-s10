@@ -26,9 +26,31 @@ import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 class UsuarioApplicationServiceTest {
 
 	@InjectMocks
-	private UsuarioApplicationService usuarioApplicationService;
+	UsuarioApplicationService usuarioApplicationService;
+
 	@Mock
-	private UsuarioRepository usuarioRepository;
+	UsuarioRepository usuarioRepository;
+
+	@Test
+	void UsuarioMudaStatusPausaLongaSucesso() {
+		Usuario usuario = DataHelper.createUsuario();
+
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+		usuarioApplicationService.mudaStatusPausaLonga(usuario.getEmail(), usuario.getIdUsuario());
+		verify(usuarioRepository, times(1)).salva(any());
+	}
+
+	@Test
+	void UsuarioMudaStatusPausaLongaFalha() {
+		Usuario usuario = DataHelper.createUsuario();
+
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+		APIException ex = assertThrows(APIException.class,
+				() -> usuarioApplicationService.mudaStatusPausaLonga(usuario.getEmail(), UUID.randomUUID()));
+		assertEquals(APIException.class, ex.getClass());
+		assertEquals(HttpStatus.UNAUTHORIZED, ex.getStatusException());
+		assertEquals("credencial de autenticação não e valida!", ex.getMessage());
+	}
 
 	@Test
 	void testaPausaCurta() {
@@ -49,7 +71,7 @@ class UsuarioApplicationServiceTest {
 		APIException exception = assertThrows(APIException.class,
 				() -> usuarioApplicationService.mudaStatusPausaCurta("qualquer@email.com", UUID.randomUUID()));
 
-		assertEquals("credencial de autenticação não é valida!", exception.getMessage());
+		assertEquals("credencial de autenticação não e valida!", exception.getMessage());
 		assertEquals(HttpStatus.UNAUTHORIZED, exception.getStatusException());
 	}
 }

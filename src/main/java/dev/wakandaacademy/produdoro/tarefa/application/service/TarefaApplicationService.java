@@ -3,11 +3,11 @@ package dev.wakandaacademy.produdoro.tarefa.application.service;
 import java.util.List;
 import java.util.UUID;
 
-import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
@@ -44,16 +44,16 @@ public class TarefaApplicationService implements TarefaService {
 		return tarefa;
 	}
 
-    @Override
-    public List<TarefaDetalhadoResponse> buscaTarefaPorUsuario(String usuario, UUID idUsuario) {
-        log.info("[inicia] TarefaApplicationService - buscaTarefaPorUsuario");
-        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
-        usuarioRepository.buscaUsuarioPorId(idUsuario);
-        usuarioPorEmail.validaUsuario(idUsuario);
-        List<Tarefa> tarefas = tarefaRepository.buscaTodasTarefasDoUsuario(idUsuario);
-        log.info("[finaliza] TarefaApplicationService - buscaTarefaPorUsuario");
-        return TarefaDetalhadoResponse.converte(tarefas);
-    }
+	@Override
+	public List<TarefaDetalhadoResponse> buscaTarefaPorUsuario(String usuario, UUID idUsuario) {
+		log.info("[inicia] TarefaApplicationService - buscaTarefaPorUsuario");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		usuarioRepository.buscaUsuarioPorId(idUsuario);
+		usuarioPorEmail.validaUsuario(idUsuario);
+		List<Tarefa> tarefas = tarefaRepository.buscaTodasTarefasDoUsuario(idUsuario);
+		log.info("[finaliza] TarefaApplicationService - buscaTarefaPorUsuario");
+		return TarefaDetalhadoResponse.converte(tarefas);
+	}
 
 	@Override
 	public void deletaTarefa(String usuario, UUID idTarefa) {

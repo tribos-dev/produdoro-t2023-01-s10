@@ -29,10 +29,11 @@ public interface TarefaAPI {
 	TarefaDetalhadoResponse detalhaTarefa(@RequestHeader(name = "Authorization", required = true) String token,
 			@PathVariable UUID idTarefa);
 
-    @GetMapping("/listaTarefas/{idUsuario}")
-    @ResponseStatus(code = HttpStatus.OK)
-            List<TarefaDetalhadoResponse> getTodasTarefas(@RequestHeader(name = "Authorization",required = true) String token,
-                                                          @PathVariable UUID idUsuario);
+	@GetMapping("/listaTarefas/{idUsuario}")
+	@ResponseStatus(code = HttpStatus.OK)
+	List<TarefaDetalhadoResponse> getTodasTarefas(@RequestHeader(name = "Authorization", required = true) String token,
+			@PathVariable UUID idUsuario);
+
 	@PatchMapping("/conclui/{idTarefa}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	void concluiTarefa(@RequestHeader(name = "Authorization", required = true) String token,
