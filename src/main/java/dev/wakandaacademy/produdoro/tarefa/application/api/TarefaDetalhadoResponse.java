@@ -31,7 +31,6 @@ public class TarefaDetalhadoResponse {
         this.statusAtivacao = tarefa.getStatusAtivacao();
         this.contagemPomodoro = tarefa.getContagemPomodoro();
     }
-
     public static List<TarefaDetalhadoResponse> converte(List<Tarefa> tarefa) {
         return tarefa.stream()
                 .map(TarefaDetalhadoResponse::new)
