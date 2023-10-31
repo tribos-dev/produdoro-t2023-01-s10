@@ -1,18 +1,16 @@
 package dev.wakandaacademy.produdoro.tarefa.domain;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
-import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.HttpStatus;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.usuario.domain.Usuario;
 import lombok.AccessLevel;
@@ -20,11 +18,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Builder
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Getter
+@Setter
 @Document(collection = "Tarefa")
 public class Tarefa {
 	@Id
@@ -52,20 +52,26 @@ public class Tarefa {
 		this.contagemPomodoro = 1;
 	}
 
-	public void incrementaPomodoro() {
-		this.contagemPomodoro += 1;
-	}
-
 	public void pertenceAoUsuario(Usuario usuarioPorEmail) {
 		if (!this.idUsuario.equals(usuarioPorEmail.getIdUsuario())) {
 			throw APIException.build(HttpStatus.UNAUTHORIZED, "Usuário não é dono da Tarefa solicitada!");
 		}
 	}
+
 	public void ativarTarefa() {
 		this.statusAtivacao = StatusAtivacaoTarefa.ATIVA;
+	}
+
+	public void edita(EditaTarefaRequest tarefaRequestEditada) {
+		this.descricao = tarefaRequestEditada.getDescricao();
+	}
+
+	public void incrementaPomodoro() {
+		this.contagemPomodoro += 1;
 	}
 
 	public void concluiTarefa() {
 		this.status = StatusTarefa.CONCLUIDA;
 	}
+
 }
