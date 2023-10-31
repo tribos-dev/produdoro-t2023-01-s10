@@ -20,13 +20,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @ToString
 @Document(collection = "Usuario")
-@Log4j2
 public class Usuario {
 	@Id
 	private UUID idUsuario;
@@ -38,7 +38,7 @@ public class Usuario {
 	private StatusUsuario status = StatusUsuario.FOCO;
 	@Builder.Default
 	private Integer quantidadePomodorosPausaCurta = 0;
-	
+
 	public Usuario(UsuarioNovoRequest usuarioNovo, ConfiguracaoPadrao configuracaoPadrao) {
 		this.idUsuario = UUID.randomUUID();
 		this.email = usuarioNovo.getEmail();
@@ -47,12 +47,16 @@ public class Usuario {
 	}
 
 	public void validaUsuario(UUID idUsuario) {
-		log.warn("[inicia] Usuario - validaUsuario");
-		if(!this.idUsuario.equals(idUsuario)) {
-			log.error("Credencial de autenticação {} não é valida", idUsuario);
-			throw APIException.build(HttpStatus.UNAUTHORIZED, "Credencial de autenticação não é valida");
+		log.info("[inicia] Usuario - validaUsuario");
+		if (!this.idUsuario.equals(idUsuario)) {
+			throw APIException.build(HttpStatus.UNAUTHORIZED, "credencial de autenticação não e valida!");
 		}
-		log.warn("[finaliza] Usuario - validaUsuario");
+		log.info("[finaliza] Usuario - validaUsuario");
+	}
+
+	public void mudaStatusPausaCurta() {
+		this.status = StatusUsuario.PAUSA_CURTA;
+
 	}
 
 	public void mudaStatusPausaLonga() {
@@ -60,5 +64,5 @@ public class Usuario {
 		this.status = StatusUsuario.PAUSA_LONGA;
 		log.info("[finaliza] Usuario - mudaStatusPausaLonga");
 
-    }
+	}
 }

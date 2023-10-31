@@ -1,11 +1,13 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
@@ -40,5 +42,50 @@ public class TarefaApplicationService implements TarefaService {
 		tarefa.pertenceAoUsuario(usuarioPorEmail);
 		log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
 		return tarefa;
+	}
+
+	@Override
+	public List<TarefaDetalhadoResponse> buscaTarefaPorUsuario(String usuario, UUID idUsuario) {
+		log.info("[inicia] TarefaApplicationService - buscaTarefaPorUsuario");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		usuarioRepository.buscaUsuarioPorId(idUsuario);
+		usuarioPorEmail.validaUsuario(idUsuario);
+		List<Tarefa> tarefas = tarefaRepository.buscaTodasTarefasDoUsuario(idUsuario);
+		log.info("[finaliza] TarefaApplicationService - buscaTarefaPorUsuario");
+		return TarefaDetalhadoResponse.converte(tarefas);
+	}
+
+	@Override
+	public void deletaTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - deletaTarefa");
+		Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
+				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Tarefa não encontrada!"));
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		tarefa.pertenceAoUsuario(usuarioPorEmail);
+		tarefaRepository.deleta(tarefa);
+		log.info("[finaliza] TarefaApplicationService - deletaTarefa");
+	}
+
+	@Override
+	public void imcrementaPomodoro(String usuarioEmail, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - imcrementaPomodoro");
+		Tarefa tarefa = detalhaTarefa(usuarioEmail, idTarefa);
+		tarefa.incrementaPomodoro();
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - imcrementaPomodoro");
+	}
+
+	@Override
+	public void concluiTarefa(String usuario, UUID idTarefa) {
+		log.info("[inicia] TarefaApplicationService - concluiTarefa");
+		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+		log.info("[usuarioPorEmail] {}", usuarioPorEmail);
+		Tarefa tarefa = tarefaRepository.buscaTarefaPorId(idTarefa)
+				.orElseThrow(() -> APIException.build(HttpStatus.BAD_REQUEST, "Tarefa não encontrada!"));
+		tarefa.pertenceAoUsuario(usuarioPorEmail);
+		tarefa.concluiTarefa();
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - concluiTarefa");
+
 	}
 }
