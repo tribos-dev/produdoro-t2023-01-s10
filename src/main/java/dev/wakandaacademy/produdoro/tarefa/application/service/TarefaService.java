@@ -10,9 +10,10 @@ import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.domain.Tarefa;
 
 public interface TarefaService {
+
 	TarefaIdResponse criaNovaTarefa(TarefaRequest tarefaRequest);
 
-	Tarefa detalhaTarefa(String usuario, UUID idTarefa);
+	void ativaTarefa(String usuarioToken, UUID idUsuario, UUID idTarefa);
 
 	void editaDescricaoDaTarefa(String usuario, UUID idTarefa, EditaTarefaRequest tarefaRequestEditada);
 
@@ -21,6 +22,8 @@ public interface TarefaService {
 	void deletaTarefa(String usuario, UUID idTarefa);
 
 	void imcrementaPomodoro(String usuario, UUID idTarefa);
+
+	Tarefa detalhaTarefa(String usuario, UUID idTarefa);
 
 	void concluiTarefa(String usuario, UUID idTarefa);
 }

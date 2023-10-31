@@ -12,12 +12,14 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import dev.wakandaacademy.produdoro.DataHelper;
 import dev.wakandaacademy.produdoro.handler.APIException;
@@ -35,6 +37,7 @@ class TarefaApplicationServiceTest {
 	// @Autowired
 	@InjectMocks
 	TarefaApplicationService tarefaApplicationService;
+
 	// @MockBean
 	@Mock
 	TarefaRepository tarefaRepository;
@@ -46,12 +49,47 @@ class TarefaApplicationServiceTest {
 	void deveRetornarIdTarefaNovaCriada() {
 		TarefaRequest request = getTarefaRequest();
 		when(tarefaRepository.salva(any())).thenReturn(new Tarefa(request));
-		when(tarefaRepository.salva(any())).thenReturn(new Tarefa(request));
 		TarefaIdResponse response = tarefaApplicationService.criaNovaTarefa(request);
 
 		assertNotNull(response);
 		assertEquals(TarefaIdResponse.class, response.getClass());
 		assertEquals(UUID.class, response.getIdTarefa().getClass());
+	}
+
+	public TarefaRequest getTarefaRequest() {
+		TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
+		return request;
+	}
+
+//	@Test
+//	@DisplayName("Should be able to turn on a task")
+//	void deveSerCapazDeAtivarTarefa() {
+//		Tarefa tarefa = DataHelper.createTarefa();
+//		Usuario usuario = DataHelper.createUsuario();
+//
+//		when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
+//		when(tarefaRepository.buscaTarefaPorId(any(UUID.class))).thenReturn(Optional.of(tarefa));
+//		tarefaApplicationService.ativaTarefa(usuario.getEmail(), usuario.getIdUsuario(), tarefa.getIdTarefa());
+//
+//		verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario.getEmail());
+//		verify(tarefaRepository, times(1)).buscaTarefaPorId(tarefa.getIdTarefa());
+//		verify(tarefa, times(1)).pertenceAoUsuario(usuario);
+//		assertEquals(StatusAtivacaoTarefa.ATIVA, tarefa.getStatusAtivacao());
+//	}
+
+	@Test
+	@DisplayName("Should be able to return an error when idTask invalid")
+	void deveSerCapazDeRetornarErroQuandoIdForInvalido() throws APIException {
+		Usuario usuario = DataHelper.createUsuario();
+		Tarefa tarefa = DataHelper.createTarefa();
+//	        when(usuarioRepository.buscaUsuarioPorEmail(anyString())).thenReturn(usuario);
+//	        when(tarefaRepository.buscaTarefaPorId(any(UUID.class))).thenReturn(Optional.of(tarefa));
+
+		APIException ex = Assertions.assertThrows(APIException.class, () -> {
+			tarefaApplicationService.ativaTarefa(usuario.getEmail(), usuario.getIdUsuario(), tarefa.getIdTarefa());
+		});
+		assertEquals("id da tarefa inválido", ex.getMessage());
+		assertEquals(HttpStatus.BAD_REQUEST, ex.getStatusException());
 	}
 
 	@Test
@@ -69,11 +107,6 @@ class TarefaApplicationServiceTest {
 		verify(tarefaRepository, times(1)).buscaTarefaPorId(idTarefa);
 		verify(tarefaRepository, times(1)).deleta(tarefaMock);
 
-	}
-
-	public TarefaRequest getTarefaRequest() {
-		TarefaRequest request = new TarefaRequest("tarefa 1", UUID.randomUUID(), null, null, 0);
-		return request;
 	}
 
 	@Test
