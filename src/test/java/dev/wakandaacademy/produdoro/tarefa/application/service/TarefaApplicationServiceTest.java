@@ -84,7 +84,7 @@ class TarefaApplicationServiceTest {
 		when(tarefaRepository.buscaTarefaPorId(idTarefa)).thenReturn(Optional.of(tarefaMock));
 		tarefaApplicationService.concluiTarefa(usuario, idTarefa);
 	}
-
+	@Test
 	@DisplayName("Teste incrementa pomodoro")
 	void incrementaPomodoro_idTarefaETokenValido_DeveIncrementarUmPomodoro() {
 		// DADO

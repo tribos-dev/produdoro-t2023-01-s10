@@ -1,7 +1,9 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
+import java.util.List;
 import java.util.UUID;
 
+import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +43,17 @@ public class TarefaApplicationService implements TarefaService {
 		log.info("[finaliza] TarefaApplicationService - detalhaTarefa");
 		return tarefa;
 	}
+
+    @Override
+    public List<TarefaDetalhadoResponse> buscaTarefaPorUsuario(String usuario, UUID idUsuario) {
+        log.info("[inicia] TarefaApplicationService - buscaTarefaPorUsuario");
+        Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
+        usuarioRepository.buscaUsuarioPorId(idUsuario);
+        usuarioPorEmail.validaUsuario(idUsuario);
+        List<Tarefa> tarefas = tarefaRepository.buscaTodasTarefasDoUsuario(idUsuario);
+        log.info("[finaliza] TarefaApplicationService - buscaTarefaPorUsuario");
+        return TarefaDetalhadoResponse.converte(tarefas);
+    }
 
 	@Override
 	public void deletaTarefa(String usuario, UUID idTarefa) {
