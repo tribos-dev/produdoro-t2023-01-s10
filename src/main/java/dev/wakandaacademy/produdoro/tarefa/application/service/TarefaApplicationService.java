@@ -50,6 +50,7 @@ public class TarefaApplicationService implements TarefaService {
 		log.info("[inicia] TarefaApplicationService - editaDescricaoDaTarefa");
 		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
 		tarefa.edita(tarefaRequestEditada);
+		tarefaRepository.salva(tarefa);
 		log.info("[finaliza] TarefaApplicationService - editaDescricaoDaTarefa");
 	}
 
