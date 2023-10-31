@@ -1,8 +1,8 @@
 package dev.wakandaacademy.produdoro.tarefa.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -20,6 +20,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import dev.wakandaacademy.produdoro.DataHelper;
+import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.repository.TarefaRepository;
@@ -101,5 +103,29 @@ class TarefaApplicationServiceTest {
 		// ENTÃO
 		verify(tarefaRepository, times(1)).salva(any(Tarefa.class));
 
+	}
+
+	@Test
+	void deveEditarTarefa() {
+		EditaTarefaRequest request = DataHelper.getEditaTarefaRequest();
+		Usuario usuario = DataHelper.createUsuario();
+		Tarefa tarefa = DataHelper.createTarefa();
+		when(usuarioRepository.buscaUsuarioPorEmail(any())).thenReturn(usuario);
+		when(tarefaRepository.buscaTarefaPorId(any())).thenReturn(Optional.of(tarefa));
+		tarefaApplicationService.editaDescricaoDaTarefa(usuario.getEmail(), tarefa.getIdTarefa(), request);
+
+		verify(usuarioRepository, times(1)).buscaUsuarioPorEmail(usuario.getEmail());
+		verify(tarefaRepository, times(1)).buscaTarefaPorId(tarefa.getIdTarefa());
+		assertEquals(request.getDescricao(), tarefa.getDescricao());
+	}
+
+	@Test
+	void naoDeveEditarTarefa() {
+		UUID idTarefaInvalido = UUID.fromString("c28932c0-4b44-4192-aaa1-021fd2d8ecef");
+		String UsuarioEmail = DataHelper.getEditaTarefaRequest().getDescricao();
+
+		when(tarefaRepository.buscaTarefaPorId(idTarefaInvalido)).thenThrow(APIException.class);
+		assertThrows(APIException.class,
+				() -> tarefaApplicationService.editaDescricaoDaTarefa(UsuarioEmail, idTarefaInvalido, null));
 	}
 }

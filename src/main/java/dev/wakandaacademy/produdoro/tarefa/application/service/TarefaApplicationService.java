@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import dev.wakandaacademy.produdoro.handler.APIException;
+import dev.wakandaacademy.produdoro.tarefa.application.api.EditaTarefaRequest;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaDetalhadoResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaIdResponse;
 import dev.wakandaacademy.produdoro.tarefa.application.api.TarefaRequest;
@@ -45,6 +46,15 @@ public class TarefaApplicationService implements TarefaService {
 	}
 
 	@Override
+	public void editaDescricaoDaTarefa(String usuario, UUID idTarefa, EditaTarefaRequest tarefaRequestEditada) {
+		log.info("[inicia] TarefaApplicationService - editaDescricaoDaTarefa");
+		Tarefa tarefa = detalhaTarefa(usuario, idTarefa);
+		tarefa.edita(tarefaRequestEditada);
+		tarefaRepository.salva(tarefa);
+		log.info("[finaliza] TarefaApplicationService - editaDescricaoDaTarefa");
+	}
+
+	@Override
 	public List<TarefaDetalhadoResponse> buscaTarefaPorUsuario(String usuario, UUID idUsuario) {
 		log.info("[inicia] TarefaApplicationService - buscaTarefaPorUsuario");
 		Usuario usuarioPorEmail = usuarioRepository.buscaUsuarioPorEmail(usuario);
@@ -72,7 +82,7 @@ public class TarefaApplicationService implements TarefaService {
 		Tarefa tarefa = detalhaTarefa(usuarioEmail, idTarefa);
 		tarefa.incrementaPomodoro();
 		tarefaRepository.salva(tarefa);
-		log.info("[finaliza] TarefaApplicationService - imcrementaPomodoro");
+		log.info("[finaliza] TarefaApplicationService - editaDescricaoDaTarefa");
 	}
 
 	@Override
